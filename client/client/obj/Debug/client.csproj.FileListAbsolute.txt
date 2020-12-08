@@ -13,3 +13,5 @@ C:\Users\hi420\Desktop\server_test\client\client\obj\Debug\client.csproj.Generat
 C:\Users\hi420\Desktop\server_test\client\client\obj\Debug\client.csproj.CoreCompileInputs.cache
 C:\Users\hi420\Desktop\server_test\client\client\obj\Debug\client.exe
 C:\Users\hi420\Desktop\server_test\client\client\obj\Debug\client.pdb
+C:\Users\hi420\Desktop\server_test\client\client\obj\Debug\IPCheck.g.cs
+C:\Users\hi420\Desktop\server_test\client\client\obj\Debug\IPCheck.baml

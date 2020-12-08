@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Net;
 using System.Net.Sockets;
 
 namespace client
@@ -9,6 +10,7 @@ namespace client
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		my_client mine = null;
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -16,8 +18,17 @@ namespace client
 
 		private void StartButton_Click(object sender, RoutedEventArgs e)
 		{
-			my_client.Connect("127.0.0.1","Hello!");
+			IPCheck check = new IPCheck();
+			check.Show();
+			/*
+			IPAddress[] address = new IPAddress[0];
+			Array.Resize(ref address,address.Length+1);
+			address[address.Length - 1] = IPAddress.Parse("127.0.0.1");
+			mine = new my_client();
+			mine.Connect(address, 2001);
 			MessageBox.Show("start");
+			mine.sentMessage("hello!");
+			*/
 		}
 		public void ShowError(Exception e)
 		{
@@ -26,59 +37,26 @@ namespace client
 
 		private void stopButton_Click(object sender, RoutedEventArgs e)
 		{
-			my_client mine = new my_client();
-
-			mine.sentMessage("stop");
+			if (mine != null) {
+				mine.sentMessage("stop");
+			}
 		}
 	}
 
 	public class my_client
 	{
-		//TcpClient tcpCliant;
-		private static NetworkStream stream;
-		//private string adress = "127.0.0.1";
-		//private Int32 port = 2001;
-		public static void Connect(String server, String message)
+		private NetworkStream stream;
+		private TcpClient client;
+		public void Connect(IPAddress[] server, Int32 port)
 		{
-			my_client mine = new my_client();
 			try
 			{
-				// Create a TcpClient.
-				// Note, for this client to work you need to have a TcpServer
-				// connected to the same address as specified by the server, port
-				// combination.
-				Int32 port = 2001;
-				TcpClient client = new TcpClient(server, port);
-
-				// Get a client stream for reading and writing.
-
+				client = new TcpClient();
+				client.Connect(server, port);
 				stream = client.GetStream();
-
-				// Send the message to the connected TcpServer.
-
-				mine.sentMessage(message);
-
 				
-
-				Console.WriteLine("Sent: {0}", message);
-
-				// Receive the TcpServer.response.
-
-				// Buffer to store the response bytes.
-				Byte[] data = new Byte[256];
-
-				// String to store the response ASCII representation.
-				String responseData = null;
-
-				// Read the first batch of the TcpServer response bytes.
-				Int32 bytes = stream.Read(data, 0, data.Length);
-				responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
-				Console.WriteLine("Received: {0}", responseData);
-
-				// Close everything.
-				stream.Close();
-				client.Close();
 			}
+			//error処理
 			catch (ArgumentNullException e)
 			{
 				Console.WriteLine("ArgumentNullException: {0}", e);
@@ -88,14 +66,35 @@ namespace client
 				Console.WriteLine("SocketException: {0}", e);
 			}
 		}
-		public int sentMessage(string message) {
+
+		public void EndConnect() {
+			//client終了処理
+			stream.Close();
+			client.Close();
+
+		}
+
+		//messageを送る
+		public void sentMessage(string message) {
 			// Translate the passed message into ASCII and store it as a Byte array.
 			Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
-			MessageBox.Show("Send :"+message) ;
-			if (message == "stop")
-				return 1;
+			MessageBox.Show("Send :"+message) ;									//message内容を表示
 			stream.Write(data, 0, data.Length);
-			return 0;
+			readRecieveMessage();
+			if (message == "stop") {
+				EndConnect();
+				MessageBox.Show("End");
+			}
+		}
+		//responceされたデータの復元
+		private void readRecieveMessage() {
+			Byte[] data = new Byte[256];
+			String responseData = null;
+
+			Int32 bytes = stream.Read(data, 0, data.Length);
+			responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);            //ASCIIとして復元
+			Console.WriteLine("Received: {0}", responseData);                               //表示
+
 		}
 
 	}

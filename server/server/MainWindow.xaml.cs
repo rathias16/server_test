@@ -42,10 +42,10 @@ namespace server
 			{
 				//自身に接続するように設定
 				Int32 port = 2001;
-				IPAddress address = IPAddress.Parse("127.0.0.1");
+				
 
 				//サーバーの初期化
-				listener = new TcpListener(address, port);
+				listener = new TcpListener(IPAddress.Any, port);
 
 				//リクエストを受け付け開始
 				listener.Start();
@@ -53,36 +53,48 @@ namespace server
 				Byte[] bytes = new Byte[256];
 				string data = null;
 
-				while (true)
+				TcpClient tcpClient = new TcpClient();
+
+				while (true)											//起動している限りclientを待機
 				{
-
-					TcpClient tcpClient = listener.AcceptTcpClient();
-					MessageBox.Show("Connected.");
-
-					data = null;
+					if (tcpClient.Connected == false)
+					{
+						tcpClient = listener.AcceptTcpClient(); //clientを受け付け
+						MessageBox.Show("Connected.");                      //接続完了
+					}
+					data = null;										//clientから受け取るデータ
 					NetworkStream stream = tcpClient.GetStream();
 					int i;
+
+					//ここからデータのやりとり
 					while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
 					{
 						data = Encoding.ASCII.GetString(bytes, 0, i);
-						MessageBox.Show("Received :" + data);
-						data = data.ToUpper();
+						MessageBox.Show("Received :" + data);		//受け取ったデータを表示
+						data = data.ToUpper();						//データを大文字にする
 
 						byte[] msg = Encoding.ASCII.GetBytes(data);
-						stream.Write(msg, 0, msg.Length);
-						MessageBox.Show("Sent : " + msg);
+						stream.Write(msg, 0, msg.Length);			//送り返す
+						MessageBox.Show("Sent : " + msg);			//送り返したメッセージを表示
 					}
-					tcpClient.Close();
+
+					//データのやりとりここまで
+					if (data == "stop")
+					{
+						tcpClient.Close();                              //clientとの接続を切る
+						tcpClient = new TcpClient();
+						MessageBox.Show("End Conection." );
+					}
 				}
 
 
 			}
-			catch (SocketException e)
+			catch (SocketException e)								//通信エラーが発生した場合
 			{
-				MessageBox.Show(e.Message);
+				MessageBox.Show(e.Message);							//表示
 			}
 			finally {
-				listener.Stop();
+				listener.Stop();									//サーバーを停止
 			}
 
 		}
