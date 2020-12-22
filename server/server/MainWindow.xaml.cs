@@ -4,14 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
 
@@ -52,7 +44,7 @@ namespace server
 
 				Byte[] bytes = new Byte[256];
 				string data = null;
-
+				
 				TcpClient tcpClient = new TcpClient();
 
 				while (true)											//起動している限りclientを待機
@@ -71,15 +63,16 @@ namespace server
 					{
 						data = Encoding.ASCII.GetString(bytes, 0, i);
 						MessageBox.Show("Received :" + data);		//受け取ったデータを表示
-						data = data.ToUpper();						//データを大文字にする
+						//data = data.ToUpper();						//データを大文字にする
 
 						byte[] msg = Encoding.ASCII.GetBytes(data);
 						stream.Write(msg, 0, msg.Length);			//送り返す
-						MessageBox.Show("Sent : " + msg);			//送り返したメッセージを表示
+						//MessageBox.Show("Sent : " + msg);           //送り返したメッセージを表示
+						
 					}
-
+					
 					//データのやりとりここまで
-					if (data == "stop")
+					if ("stop" == data)
 					{
 						tcpClient.Close();                              //clientとの接続を切る
 						tcpClient = new TcpClient();

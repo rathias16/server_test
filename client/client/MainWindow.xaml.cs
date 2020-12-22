@@ -18,17 +18,25 @@ namespace client
 
 		private void StartButton_Click(object sender, RoutedEventArgs e)
 		{
-			IPCheck check = new IPCheck();
+			IPCheck check = new IPCheck(this);
 			check.Show();
-			/*
+			
+		}
+		public void StartConnect(IPCheck check) {
 			IPAddress[] address = new IPAddress[0];
-			Array.Resize(ref address,address.Length+1);
-			address[address.Length - 1] = IPAddress.Parse("127.0.0.1");
+			foreach (string item in check.selected)
+			{
+				Array.Resize(ref address, address.Length + 1);
+				Console.WriteLine(item);
+				address[address.Length - 1] = IPAddress.Parse(item);
+			}
+			
 			mine = new my_client();
 			mine.Connect(address, 2001);
+
 			MessageBox.Show("start");
 			mine.sentMessage("hello!");
-			*/
+			
 		}
 		public void ShowError(Exception e)
 		{
@@ -37,6 +45,7 @@ namespace client
 
 		private void stopButton_Click(object sender, RoutedEventArgs e)
 		{
+
 			if (mine != null) {
 				mine.sentMessage("stop");
 			}
