@@ -1,35 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Net.Sockets;
 using System.Net;
 
 namespace server
 {
-	/// <summary>
-	/// MainWindow.xaml の相互作用ロジック
-	/// </summary>
-	public partial class MainWindow : Window
+	class my_server
 	{
-		public MainWindow()
-		{
-			InitializeComponent();
-		}
 
-		private void Button_Click(object sender, RoutedEventArgs e)
-		{
-			MessageBox.Show("Wait Start.");
-			my_server.wait();
-		}
-
-	
-	}
-
-	class my_server {
-		public static bool isEnd = false;
 		public static void wait()
 		{
 			TcpListener listener = null;
@@ -37,7 +14,7 @@ namespace server
 			{
 				//自身に接続するように設定
 				Int32 port = 2001;
-				
+
 
 				//サーバーの初期化
 				listener = new TcpListener(IPAddress.Any, port);
@@ -47,18 +24,17 @@ namespace server
 
 				Byte[] bytes = new Byte[256];
 				string data = null;
-				
+
 				TcpClient tcpClient = new TcpClient();
 
-				while (true)											//起動している限りclientを待機
+				while (true)                                            //起動している限りclientを待機
 				{
-
 					if (tcpClient.Connected == false)
 					{
 						tcpClient = listener.AcceptTcpClient(); //clientを受け付け
 						MessageBox.Show("Connected.");                      //接続完了
 					}
-					data = null;										//clientから受け取るデータ
+					data = null;                                        //clientから受け取るデータ
 					NetworkStream stream = tcpClient.GetStream();
 					int i;
 
@@ -66,34 +42,32 @@ namespace server
 					while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
 					{
 						data = Encoding.ASCII.GetString(bytes, 0, i);
-						MessageBox.Show("Received :" + data);		//受け取ったデータを表示
+						MessageBox.Show("Received :" + data);       //受け取ったデータを表示
 						byte[] msg = Encoding.ASCII.GetBytes(data);
-						stream.Write(msg, 0, msg.Length);			//送り返す
-						
+						stream.Write(msg, 0, msg.Length);           //送り返す
+
 					}
-					
+
 					//データのやりとりここまで
-					if ("stop" == data)
+					if ("stop\n" == data)
 					{
 						tcpClient.Close();                              //clientとの接続を切る
 						tcpClient = new TcpClient();
-						MessageBox.Show("End Conection." );
-						End end = new End();
-						end.Show();
+						MessageBox.Show("End Conection.");
 					}
 				}
 
 
 			}
-			catch (SocketException e)								//通信エラーが発生した場合
+			catch (SocketException e)                               //通信エラーが発生した場合
 			{
-				MessageBox.Show(e.Message);							//表示
+				MessageBox.Show(e.Message);                         //表示
 			}
-			finally {
-				listener.Stop();									//サーバーを停止
+			finally
+			{
+				listener.Stop();                                    //サーバーを停止
 			}
 
 		}
 	}
 }
-

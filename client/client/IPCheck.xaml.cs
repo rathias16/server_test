@@ -38,6 +38,8 @@ namespace client
 			Console.WriteLine(selected.Count);
 			
 			main.StartConnect(this);
+			
+
 		}
 		public void GetIPList()
 		{
@@ -50,7 +52,6 @@ namespace client
 			{
 				while ((tmp = sr.ReadLine()) != null)
 				{
-					//line.Append(tmp);
 					IPList i = new IPList();
 					i.ip = tmp;
 					i.isSelect = false;
