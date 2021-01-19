@@ -75,7 +75,7 @@ namespace server
 					if ("start" == data) {
 						var proc = new System.Diagnostics.Process();
 
-						proc.StartInfo.FileName = @"C:\WINDOWS\system32.notepad.exe";
+						proc.StartInfo.FileName = @"C:\Windows\system32\notepad.exe";
 						proc.Start();
 
 					}
