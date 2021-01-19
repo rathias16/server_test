@@ -71,15 +71,25 @@ namespace server
 						stream.Write(msg, 0, msg.Length);			//送り返す
 						
 					}
-					
+
+					if ("start" == data) {
+						var proc = new System.Diagnostics.Process();
+
+						proc.StartInfo.FileName = @"C:\WINDOWS\system32.notepad.exe";
+						proc.Start();
+
+					}
+
 					//データのやりとりここまで
 					if ("stop" == data)
 					{
 						tcpClient.Close();                              //clientとの接続を切る
 						tcpClient = new TcpClient();
 						MessageBox.Show("End Conection." );
-						End end = new End();
-						end.Show();
+						var proc = new System.Diagnostics.Process();
+
+						proc.StartInfo.FileName = @"C:\windows\system32\notepad.exe";
+						proc.Start();
 					}
 				}
 

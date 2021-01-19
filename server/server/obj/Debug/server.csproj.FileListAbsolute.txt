@@ -28,5 +28,3 @@ C:\Users\hi420\OneDrive - 独立行政法人 国立高等専門学校機構\デ�
 C:\Users\hi420\OneDrive - 独立行政法人 国立高等専門学校機構\デスクトップ\server_test\server\server\obj\Debug\server.exe
 C:\Users\hi420\OneDrive - 独立行政法人 国立高等専門学校機構\デスクトップ\server_test\server\server\obj\Debug\server.pdb
 C:\Users\hi420\OneDrive - 独立行政法人 国立高等専門学校機構\デスクトップ\server_test\server\server\obj\Debug\server.csprojAssemblyReference.cache
-C:\Users\hi420\OneDrive - 独立行政法人 国立高等専門学校機構\デスクトップ\server_test\server\server\obj\Debug\End.g.cs
-C:\Users\hi420\OneDrive - 独立行政法人 国立高等専門学校機構\デスクトップ\server_test\server\server\obj\Debug\End.baml

@@ -35,7 +35,7 @@ namespace client
 			mine.Connect(address, 2001);
 
 			MessageBox.Show("start");
-			mine.sentMessage("hello!");
+			mine.sentMessage("start");
 			
 		}
 		public void ShowError(Exception e)
