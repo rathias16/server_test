@@ -10,7 +10,7 @@ namespace client
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		my_client mine = null;
+		my_client[] mine = null;
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -31,11 +31,15 @@ namespace client
 				address[address.Length - 1] = IPAddress.Parse(item);
 			}
 			
-			mine = new my_client();
-			mine.Connect(address, 2001);
+			mine = new my_client[address.Length];
+			for (int i = 0; i < address.Length; i++)
+			{
+				mine[i] = new my_client();
+				mine[i].Connect(address[i], 2001);
 
-			MessageBox.Show("start");
-			mine.sentMessage("start");
+				MessageBox.Show("start");
+				mine[i].sentMessage("start");
+			}
 			
 		}
 		public void ShowError(Exception e)
@@ -45,9 +49,13 @@ namespace client
 
 		private void stopButton_Click(object sender, RoutedEventArgs e)
 		{
+			for (int i = 0; i < mine.Length; i++)
+			{
 
-			if (mine != null) {
-				mine.sentMessage("stop");
+				if (mine[i] != null)
+				{
+					mine[i].sentMessage("stop");
+				}
 			}
 		}
 	}
@@ -56,7 +64,7 @@ namespace client
 	{
 		private NetworkStream stream;
 		private TcpClient client;
-		public void Connect(IPAddress[] server, Int32 port)
+		public void Connect(IPAddress server, Int32 port)
 		{
 			try
 			{
